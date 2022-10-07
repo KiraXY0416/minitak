@@ -16,7 +16,7 @@ FTMEM_DIR	=	ft_mem/
 FTMEM		=	ft_bzero ft_calloc ft_memchr ft_memcmp ft_memmove ft_memset
 
 FTPUT_DIR	=	ft_put/
-FTPUT		=	ft_putchar ft_putendl ft_putnbr ft_putstr
+FTPUT		=	ft_putchar_fd ft_putendl_fd ft_putnbr_fd ft_putstr_fd
 
 FTTO_DIR	=	ft_to/
 FTTO		=	ft_atoi ft_itoa ft_tolower ft_toupper

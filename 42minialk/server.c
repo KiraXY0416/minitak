@@ -2,45 +2,35 @@
 #include <unistd.h>
 #include "include/libft.h"
 
-static void	action(int sig, siginfo_t *info, void *context)
+void	ft_handler(int signal)
 {
-	static int				i = 0;
-	static pid_t			client_pid = 0;
-	static unsigned char	c = 0;
+	static int	bit;
+	static int	i;
 
-	(void)context;
-	if (!client_pid)
-		client_pid = info->si_pid;
-	c |= (sig == SIGUSR2);
-	if (++i == 8)
+	if (signal == SIGUSR1)
+		i |= (0x01 << bit);
+	bit++;
+	if (bit == 8)
 	{
+		write(1, &i, 1);
+		bit = 0;
 		i = 0;
-		if (!c)
-		{
-			kill(client_pid, SIGUSR2);
-			client_pid = 0;
-			return ;
-		}
-		ft_putchar(c);
-		c = 0;
-		kill(client_pid, SIGUSR1);
 	}
-	else
-		c <<= 1;
 }
 
 int	main(void)
 {
-	struct sigaction	s_sigaction;
+	pid_t	pid;
 
-	ft_putstr("Server PID: ");
-	ft_putnbr(getpid());
-	ft_putchar('\n');
-	s_sigaction.sa_sigaction = action;
-	s_sigaction.sa_flags = SA_SIGINFO;
-	sigaction(SIGUSR1, &s_sigaction, 0);
-	sigaction(SIGUSR2, &s_sigaction, 0);
+	pid = getpid();
+	ft_putstr_fd("\033[35mSend messages from Client to Server with PID.\n\
+\033[32;40mServer [PID = \033[31m", 1);
+	ft_putnbr_fd(pid, 1);
+	ft_putstr_fd("\033[32m]\033[37;40;0m\n", 1);
+	signal(SIGUSR1, ft_handler);
+	signal(SIGUSR2, ft_handler);
 	while (1)
+	{
 		pause();
-	return (0);
+	}
 }
