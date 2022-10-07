@@ -1,6 +1,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "include/libft.h"
+#include <sys/types.h>
 
 void	ft_handler(int signal)
 {
